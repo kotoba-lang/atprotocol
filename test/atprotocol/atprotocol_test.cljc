@@ -1,5 +1,6 @@
 (ns atprotocol.atprotocol-test
   (:require [clojure.test :refer [deftest is testing]]
+            [atprotocol.app-record :as app-record]
             [atprotocol.boundary :as boundary]
             [atprotocol.profile :as profile]
             [atprotocol.projection :as projection]))
@@ -73,3 +74,31 @@
                                       :kotoba.app/appview-of {:graphs ["manga"]})
                                {:include-legacy? true})]
     (is (= "appview" (:uiType v)))))
+
+;; ── app manifest record 投影 ─────────────────────────────────────────────────
+
+(deftest app-record-round-trip
+  (let [record-value {:$type "net.kotoba.app.manifest"
+                      :id "net.kotoba.mangaka"
+                      :version "0.1.0"
+                      :kind "embed"
+                      :embedUrl "https://aozora.app/studio"
+                      :bundleCid cid
+                      :future-field "preserved"}
+        m (app-record/record->manifest record-value)]
+    (is (= "net.kotoba.mangaka" (:kotoba.app/id m)))
+    (is (= "https://aozora.app/studio" (:kotoba.app/embed-url m)))
+    (testing "未知フィールドは保全される (黙って落とさない)"
+      (is (= "preserved" (get-in m [:atprotocol/unprojected :future-field]))))
+    (is (= [] (app-record/valid-record? record-value)))
+    (testing "manifest → record は一級語彙のみ + $type"
+      (let [r (app-record/manifest->record (dissoc m :atprotocol/unprojected))]
+        (is (= "net.kotoba.app.manifest" (:$type r)))
+        (is (= "embed" (:kind r)))
+        (is (= record-value (assoc r :future-field "preserved")))))))
+
+(deftest app-record-validation-flows-through
+  (is (some #(= :missing (:error %))
+            (app-record/valid-record? {:id "net.kotoba.x" :kind "embed"
+                                       :embedUrl "https://x.example/app"}))
+      "version 欠落は kotoba-protocol の validate-manifest が検出"))

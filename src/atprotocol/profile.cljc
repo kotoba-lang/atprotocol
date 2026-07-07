@@ -58,7 +58,18 @@
                     (and resolved (:url resolved)) (assoc :embedUrl (:url resolved))
                     (:kotoba.app/bundle-cid manifest) (assoc :bundleCid (:kotoba.app/bundle-cid manifest))
                     (:kotoba.app/latest manifest) (assoc :appLatest (:kotoba.app/latest manifest))
-                    (seq (:kotoba.app/caps manifest)) (assoc :appCaps (vec (:kotoba.app/caps manifest))))]
+                    (seq (:kotoba.app/caps manifest)) (assoc :appCaps (vec (:kotoba.app/caps manifest)))
+                    ;; kind=actor: wasm モジュール群を CID 解決 URL + imports に投影
+                    (seq (:kotoba.app/wasm manifest))
+                    (assoc :appWasm
+                           (mapv (fn [{:keys [cid imports]}]
+                                   (let [r (app/resolve-embed-url
+                                            (app/parse-embed-url (str "ipfs://" cid))
+                                            {:gateway gateway})]
+                                     {:cid cid
+                                      :url (:url r)
+                                      :imports (vec (or imports []))}))
+                                 (:kotoba.app/wasm manifest))))]
          (if include-legacy?
            (merge view (legacy-fields kind))
            view))))))

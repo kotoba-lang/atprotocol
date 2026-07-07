@@ -65,6 +65,20 @@
     (is (= :invalid-manifest
            (:error (profile/project-app (dissoc manifest :kotoba.app/version)))))))
 
+(deftest actor-wasm-projection
+  (let [m {:kotoba.app/id "net.kotoba.wasm-demo"
+           :kotoba.app/version "0.1.0"
+           :kotoba.app/kind "actor"
+           :kotoba.app/wasm [{:cid cid :imports ["sha256-hex" "clock-monotonic" "log-write"]}]
+           :kotoba.app/caps ["sha256-hex"]}
+        v (profile/project-app m {:gateway "https://kotobase.net"})]
+    (is (= "actor" (:appKind v)))
+    (is (= 1 (count (:appWasm v))))
+    (let [w (first (:appWasm v))]
+      (is (= cid (:cid w)))
+      (is (= (str "https://kotobase.net/ipfs/" cid) (:url w)))
+      (is (= ["sha256-hex" "clock-monotonic" "log-write"] (:imports w))))))
+
 (deftest legacy-aliases-are-deprecated-and-derivable
   (doseq [[field spec] profile/legacy-aliases]
     (is (:deprecated spec) (str field " must be marked deprecated")))

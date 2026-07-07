@@ -1,0 +1,12 @@
+{;; atprotocol — atproto 互換を kotoba-protocol の上の投影層として定義する
+ ;; boundary/spec repo (ADR-2607071500)。層関係は依存にも現れる:
+ ;; kotoba-protocol にのみ依存し、逆依存は永遠に作らない。
+ ;; XRPC/PDS/AppView の実装はここに置かない (参照実装 = gftdcojp/app-aozora)。
+ :paths ["src"]
+ :deps {io.github.kotoba-lang/kotoba-protocol {:local/root "../kotoba-protocol"}}
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+         :main-opts ["-m" "cognitect.test-runner"]
+         :exec-fn cognitect.test-runner.api/test}}}

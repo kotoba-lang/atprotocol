@@ -41,6 +41,7 @@
    :kotoba.app/kind "embed"
    :kotoba.app/bundle-cid cid
    :kotoba.app/embed-url "https://aozora.app/studio"
+   :kotoba.app/caps ["graph/query" "llm/complete"]
    :kotoba.app/latest ipns})
 
 (deftest profile-projection
@@ -50,6 +51,8 @@
     (is (= "https://aozora.app/studio" (:embedUrl v)))
     (is (= cid (:bundleCid v)))
     (is (= ipns (:appLatest v)))
+    (is (= ["graph/query" "llm/complete"] (:appCaps v))
+        "host は appCaps ∩ 対応 caps を bridge grant にする")
     (testing "legacy fields は既定で出ない (新規実装は読まない・書かない)"
       (is (not (contains? v :uiType)))
       (is (not (contains? v :contentMode)))))

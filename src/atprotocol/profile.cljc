@@ -57,7 +57,8 @@
                            :appVersion (:kotoba.app/version manifest)}
                     (and resolved (:url resolved)) (assoc :embedUrl (:url resolved))
                     (:kotoba.app/bundle-cid manifest) (assoc :bundleCid (:kotoba.app/bundle-cid manifest))
-                    (:kotoba.app/latest manifest) (assoc :appLatest (:kotoba.app/latest manifest)))]
+                    (:kotoba.app/latest manifest) (assoc :appLatest (:kotoba.app/latest manifest))
+                    (seq (:kotoba.app/caps manifest)) (assoc :appCaps (vec (:kotoba.app/caps manifest))))]
          (if include-legacy?
            (merge view (legacy-fields kind))
            view))))))

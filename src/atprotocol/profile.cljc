@@ -4,7 +4,9 @@
 
   正 (kotoba-protocol): :kotoba.app/kind と :kotoba.app/embed-url。
   atproto へ見せる一級 field は `appKind` / `embedUrl` / `appId` /
-  `bundleCid` / `appLatest`。
+  `bundleCid` / `appLatest`。embed-url が ipfs:// scheme なら raw CID も
+  `embedCid` として付ける (host が bytes を fetch して CID と一致検証できる
+  よう — ADR-2607071500 Addendum 5)。
 
   旧 W-Protocol (performerType / contentMode / uiType — svelte ActorFrame 期
   の規約) は **deprecated compat alias** としてこの層でのみ導出する。
@@ -56,6 +58,11 @@
                            :appKind kind
                            :appVersion (:kotoba.app/version manifest)}
                     (and resolved (:url resolved)) (assoc :embedUrl (:url resolved))
+                    ;; embed-url が ipfs:// の場合、host が bytes を fetch して
+                    ;; CID と一致検証できるよう raw CID もそのまま渡す (ADR-2607071500
+                    ;; Addendum 5 — :kotoba.app/bundle-cid は manifest 作者が別途
+                    ;; セットしないと出ないが、これは embed-url 自体から常に導出できる)。
+                    (and resolved (:cid resolved)) (assoc :embedCid (:cid resolved))
                     (:kotoba.app/bundle-cid manifest) (assoc :bundleCid (:kotoba.app/bundle-cid manifest))
                     (:kotoba.app/latest manifest) (assoc :appLatest (:kotoba.app/latest manifest))
                     (seq (:kotoba.app/caps manifest)) (assoc :appCaps (vec (:kotoba.app/caps manifest)))

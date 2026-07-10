@@ -60,7 +60,11 @@
     (let [v (profile/project-app (assoc manifest :kotoba.app/embed-url
                                         (str "ipfs://" cid "/index.html"))
                                  {:gateway "https://kotobase.net"})]
-      (is (= (str "https://kotobase.net/ipfs/" cid "/index.html") (:embedUrl v)))))
+      (is (= (str "https://kotobase.net/ipfs/" cid "/index.html") (:embedUrl v)))
+      (is (= cid (:embedCid v))
+          "host が fetch した bytes を CID と一致検証できるよう raw CID も投影する (Addendum 5)")))
+  (testing "https embed-url には embedCid が付かない (検証不能)"
+    (is (not (contains? (profile/project-app manifest) :embedCid))))
   (testing "invalid manifest は投影しない"
     (is (= :invalid-manifest
            (:error (profile/project-app (dissoc manifest :kotoba.app/version)))))))

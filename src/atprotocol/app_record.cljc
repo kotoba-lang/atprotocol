@@ -27,7 +27,8 @@
    :caps :kotoba.app/caps
    :limits :kotoba.app/limits
    :latest :kotoba.app/latest
-   :icon :kotoba.app/icon})
+   :icon :kotoba.app/icon
+   :sig :kotoba.app/sig})
 
 (def ^:private attr->field
   (into {} (map (fn [[f a]] [a f])) field->attr))

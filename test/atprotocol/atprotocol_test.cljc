@@ -118,6 +118,25 @@
         (is (= "embed" (:kind r)))
         (is (= record-value (assoc r :future-field "preserved")))))))
 
+(deftest app-record-sig-projection
+  (let [sig {:suite-id "ed25519+ml-dsa-65" :key-id "kagi:mangaka-actor" :epoch 1}
+        record-value {:$type "net.kotoba.app.manifest"
+                      :id "net.kotoba.mangaka"
+                      :version "0.1.0"
+                      :kind "embed"
+                      :embedUrl "https://aozora.app/studio"
+                      :sig sig}
+        m (app-record/record->manifest record-value)]
+    (is (= sig (:kotoba.app/sig m))
+        "sig は一級フィールド — :atprotocol/unprojected に落ちない")
+    (is (= [] (app-record/valid-record? record-value)))
+    (testing "round-trip preserves sig"
+      (is (= sig (:sig (app-record/manifest->record m)))))
+    (testing "malformed sig is rejected by kotoba-protocol validation (ADR-2607182600 d1b)"
+      (is (= :invalid-value
+             (:error (first (app-record/valid-record?
+                             (assoc record-value :sig {:epoch 1})))))))))
+
 (deftest app-record-validation-flows-through
   (is (some #(= :missing (:error %))
             (app-record/valid-record? {:id "net.kotoba.x" :kind "embed"

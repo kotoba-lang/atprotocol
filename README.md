@@ -22,6 +22,18 @@ atproto の record / lexicon / XRPC / handle / repo-commit wire は
   deprecated compat alias に降格** — `{:include-legacy? true}` でのみ導出され、
   新規実装は読まない・書かない。
 
+## Kotoba bounded profile
+
+`src/atprotocol/bounded_boundary.kotoba` is a capability-free, sovereign-
+source port of `atprotocol.boundary`'s fixed 12-concern ownership table —
+a tamper-evident declaration of which system owns which architectural
+concern, verified against `atprotocol.atprotocol-test`. `atprotocol.
+projection`/`atprotocol.app-record`/`atprotocol.profile` stay CLJC
+(function-valued codec contracts and open-ended JSON-record projection
+aren't Kotoba-representable today). See
+[migration/bounded-boundary-v1.edn](migration/bounded-boundary-v1.edn)
+for the full record.
+
 ## Dev
 
 ```bash

@@ -39,3 +39,17 @@ for the full record.
 ```bash
 clojure -M:test
 ```
+
+## Kotoba bounded profile — app-record vocabulary
+
+`src/atprotocol/bounded_app_record.kotoba` is a capability-free port of
+`atprotocol.app-record`'s fixed 13-field camelCase-record-key →
+`:kotoba.app/*` attribute projection vocabulary, as a canonical bounded
+typed-map (`[:map :string :keyword]`, ≤31 entries). The reduce-kv
+record↔manifest codec (which walks arbitrary open input maps and preserves
+unknown fields under `:atprotocol/unprojected`), the reverse `attr->field`
+direction, `valid-record?` (which delegates to
+`kotoba.protocol.app/validate-manifest`), and the profile/projection layers
+stay the CLJC oracle. See
+[migration/bounded-app-record-vocab-v1.edn](migration/bounded-app-record-vocab-v1.edn).
+This joins the existing `bounded_boundary.kotoba` profile in this repo.

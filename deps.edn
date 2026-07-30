@@ -3,7 +3,8 @@
  ;; kotoba-protocol にのみ依存し、逆依存は永遠に作らない。
  ;; XRPC/PDS/AppView の実装はここに置かない (参照実装 = gftdcojp/app-aozora)。
  :paths ["src"]
- :deps {io.github.kotoba-lang/kotoba-protocol {:local/root "../kotoba-protocol"}}
+ :deps {io.github.kotoba-lang/kotoba-protocol {:git/url "https://github.com/kotoba-lang/kotoba-protocol.git"
+                                     :git/sha "a8ddb2d37ef264b6e35bfd88e510ff31e9470dd5"}}
  :aliases
  {:test {:extra-paths ["test"]
          :extra-deps {io.github.cognitect-labs/test-runner

@@ -48,7 +48,7 @@
   :wasm {:main 42}
   :required-capabilities []
   :local-verification
-  {:legacy-test-suite-note "clojure -M:test could not run in this
+  {:legacy-test-suite-note "kbb -M:test could not run in this
                             isolated review checkout (deps.edn's
                             :local/root sibling dependency on
                             kotoba-protocol is only resolvable inside

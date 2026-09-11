@@ -37,7 +37,7 @@ for the full record.
 ## Dev
 
 ```bash
-clojure -M:test
+kbb -M:test
 ```
 
 ## Kotoba bounded profile — app-record vocabulary

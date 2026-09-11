@@ -1,6 +1,6 @@
 {:schema "kotoba-atprotocol-migration/v1"
  :profile :atprotocol/bounded-boundary-v1
- :legacy {:boundary-source "src/atprotocol/boundary.cljc"
+ :legacy {:boundary-source "src/atprotocol/boundary.cljk"
           :status :retained-general-oracle}
  :canonical {:engine-and-conformance "src/atprotocol/bounded_boundary.kotoba"}
  :domain

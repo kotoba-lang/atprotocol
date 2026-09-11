@@ -1,6 +1,6 @@
 {:schema "kotoba-atprotocol-migration/v1"
  :profile :atprotocol/bounded-app-record-vocab-v1
- :legacy {:source "src/atprotocol/app_record.cljc" :status :retained-general-oracle}
+ :legacy {:source "src/atprotocol/app_record.cljk" :status :retained-general-oracle}
  :canonical {:kernel-and-conformance "src/atprotocol/bounded_app_record.kotoba"}
  :domain
  {:functions [:field-attr-table :field-count :known-field? :field->attr-or]

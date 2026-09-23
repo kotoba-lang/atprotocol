@@ -1,5 +1,5 @@
 (ns atprotocol.atprotocol-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [atprotocol.app-record :as app-record]
             [atprotocol.boundary :as boundary]
             [atprotocol.profile :as profile]

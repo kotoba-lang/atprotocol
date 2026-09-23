@@ -3,3 +3,4 @@
 .lsp/
 target/
 .DS_Store
+.nbb/
